@@ -135,6 +135,8 @@ resource "aws_route" "prod_app_private_to_uat" {
   route_table_id         = each.value.id
   destination_cidr_block = var.uat_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.prod]
 }
 
 resource "aws_route" "prod_app_private_default" {
@@ -143,6 +145,8 @@ resource "aws_route" "prod_app_private_default" {
   route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.prod]
 }
 
 resource "aws_route" "prod_app_private_on_prem" {
@@ -151,6 +155,8 @@ resource "aws_route" "prod_app_private_on_prem" {
   route_table_id         = aws_route_table.prod_app_private[each.value.name].id
   destination_cidr_block = each.value.cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.prod]
 }
 
 resource "aws_route_table" "prod_db_private" {
@@ -169,6 +175,8 @@ resource "aws_route" "prod_db_private_on_prem" {
   route_table_id         = aws_route_table.prod_db_private[each.value.name].id
   destination_cidr_block = each.value.cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.prod]
 }
 
 resource "aws_route_table_association" "prod" {
@@ -217,6 +225,8 @@ resource "aws_route" "uat_app_private_to_prod" {
   route_table_id         = each.value.id
   destination_cidr_block = var.prod_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.uat]
 }
 
 resource "aws_route" "uat_app_private_default" {
@@ -225,6 +235,8 @@ resource "aws_route" "uat_app_private_default" {
   route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.uat]
 }
 
 resource "aws_route" "uat_app_private_on_prem" {
@@ -233,6 +245,8 @@ resource "aws_route" "uat_app_private_on_prem" {
   route_table_id         = aws_route_table.uat_app_private[each.value.name].id
   destination_cidr_block = each.value.cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.uat]
 }
 
 resource "aws_route_table" "uat_db_private" {
@@ -251,6 +265,8 @@ resource "aws_route" "uat_db_private_on_prem" {
   route_table_id         = aws_route_table.uat_db_private[each.value.name].id
   destination_cidr_block = each.value.cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.uat]
 }
 
 resource "aws_route_table_association" "uat" {
@@ -295,12 +311,16 @@ resource "aws_route" "network_gwlbe_to_prod" {
   route_table_id         = aws_route_table.network_gwlbe.id
   destination_cidr_block = var.prod_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route" "network_gwlbe_to_uat" {
   route_table_id         = aws_route_table.network_gwlbe.id
   destination_cidr_block = var.uat_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route" "network_gwlbe_on_prem" {
@@ -309,6 +329,8 @@ resource "aws_route" "network_gwlbe_on_prem" {
   route_table_id         = aws_route_table.network_gwlbe.id
   destination_cidr_block = each.value
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route_table_association" "network_gwlbe" {
@@ -372,6 +394,8 @@ resource "aws_route" "network_fw_mgmt_on_prem" {
   route_table_id         = aws_route_table.network_fw_mgmt.id
   destination_cidr_block = each.value
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route_table_association" "network_fw_mgmt" {
@@ -415,6 +439,8 @@ resource "aws_route" "network_r53_on_prem" {
   route_table_id         = aws_route_table.network_r53.id
   destination_cidr_block = each.value
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route_table_association" "network_r53" {
@@ -436,12 +462,16 @@ resource "aws_route" "network_fw_gp_to_prod" {
   route_table_id         = aws_route_table.network_fw_gp.id
   destination_cidr_block = var.prod_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route" "network_fw_gp_to_uat" {
   route_table_id         = aws_route_table.network_fw_gp.id
   destination_cidr_block = var.uat_vpc_cidr
   transit_gateway_id     = aws_ec2_transit_gateway.this.id
+
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.network]
 }
 
 resource "aws_route_table_association" "network_fw_gp" {

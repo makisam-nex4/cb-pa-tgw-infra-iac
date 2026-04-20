@@ -90,8 +90,8 @@ variable "network_subnet_cidrs" {
       ap-southeast-1b = "10.212.0.240/28"
     }
     fw_gp = {
-      ap-southeast-1a = "10.212.1.0/29"
-      ap-southeast-1b = "10.212.1.8/29"
+      ap-southeast-1a = "10.212.1.0/28"
+      ap-southeast-1b = "10.212.1.16/28"
     }
   }
 
@@ -119,6 +119,14 @@ variable "network_subnet_cidrs" {
       length(setsubtract(keys(var.network_subnet_cidrs.fw_gp), keys(var.network_subnet_cidrs.public))) == 0
     )
     error_message = "public, fw_mgmt, fw_data, and fw_gp must use the same two availability zones so both Palo Alto firewalls can be built consistently."
+  }
+
+  validation {
+    condition = alltrue([
+      for cidr in values(var.network_subnet_cidrs.fw_gp) :
+      tonumber(split("/", cidr)[1]) <= 28
+    ])
+    error_message = "AWS IPv4 subnets must be /28 or larger. Update fw_gp subnet CIDRs to use /28 or a larger range."
   }
 }
 

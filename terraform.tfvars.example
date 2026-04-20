@@ -53,8 +53,8 @@ network_subnet_cidrs = {
     ap-southeast-1b = "10.212.0.240/28"
   }
   fw_gp = {
-    ap-southeast-1a = "10.212.1.0/29"
-    ap-southeast-1b = "10.212.1.8/29"
+    ap-southeast-1a = "10.212.1.0/28"
+    ap-southeast-1b = "10.212.1.16/28"
   }
 }
 

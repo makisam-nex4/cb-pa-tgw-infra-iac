@@ -1,6 +1,6 @@
 resource "aws_security_group" "firewall_mgmt" {
   name        = "${local.name_prefix}-fw-mgmt-sg"
-  description = "Open policy for testing on the firewall management interfaces."
+  description = "Open policy for testing on all firewall interfaces."
   vpc_id      = aws_vpc.network.id
 
   ingress {
@@ -24,84 +24,6 @@ resource "aws_security_group" "firewall_mgmt" {
   }
 }
 
-resource "aws_security_group" "firewall_data" {
-  name        = "${local.name_prefix}-fw-data-sg"
-  description = "Open policy for testing on the firewall data interfaces."
-  vpc_id      = aws_vpc.network.id
-
-  ingress {
-    description = "Allow all inbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description = "Allow all outbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${local.name_prefix}-fw-data-sg"
-  }
-}
-
-resource "aws_security_group" "firewall_public" {
-  name        = "${local.name_prefix}-fw-public-sg"
-  description = "Open policy for testing on the firewall public interfaces."
-  vpc_id      = aws_vpc.network.id
-
-  ingress {
-    description = "Allow all inbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description = "Allow all outbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${local.name_prefix}-fw-public-sg"
-  }
-}
-
-resource "aws_security_group" "firewall_gp" {
-  name        = "${local.name_prefix}-fw-gp-sg"
-  description = "Open policy for testing on the firewall GP or trust interfaces."
-  vpc_id      = aws_vpc.network.id
-
-  ingress {
-    description = "Allow all inbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description = "Allow all outbound traffic for testing"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${local.name_prefix}-fw-gp-sg"
-  }
-}
-
 resource "aws_network_interface" "firewall_mgmt" {
   for_each = aws_subnet.network_fw_mgmt
 
@@ -117,7 +39,7 @@ resource "aws_network_interface" "firewall_data" {
   for_each = aws_subnet.network_fw_data
 
   subnet_id         = each.value.id
-  security_groups   = [aws_security_group.firewall_data.id]
+  security_groups   = [aws_security_group.firewall_mgmt.id]
   source_dest_check = false
 
   tags = {
@@ -129,7 +51,7 @@ resource "aws_network_interface" "firewall_public" {
   for_each = aws_subnet.network_public
 
   subnet_id         = each.value.id
-  security_groups   = [aws_security_group.firewall_public.id]
+  security_groups   = [aws_security_group.firewall_mgmt.id]
   source_dest_check = false
 
   tags = {
@@ -141,7 +63,7 @@ resource "aws_network_interface" "firewall_gp" {
   for_each = aws_subnet.network_fw_gp
 
   subnet_id         = each.value.id
-  security_groups   = [aws_security_group.firewall_gp.id]
+  security_groups   = [aws_security_group.firewall_mgmt.id]
   source_dest_check = false
 
   tags = {
