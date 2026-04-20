@@ -91,19 +91,19 @@ output "gwlbe_ids" {
   }
 }
 
-output "firewall_management_public_ips" {
-  description = "Elastic IPs attached to the firewall management interfaces."
-  value = {
-    for az, eip in aws_eip.firewall_mgmt : az => eip.public_ip
-  }
-}
+# output "firewall_management_public_ips" {
+#   description = "Elastic IPs attached to the firewall management interfaces."
+#   value = {
+#     for az, eip in aws_eip.firewall_mgmt : az => eip.public_ip
+#   }
+# }
 
-output "firewall_public_ips" {
-  description = "Elastic IPs attached to the firewall public or untrust interfaces."
-  value = {
-    for az, eip in aws_eip.firewall_public : az => eip.public_ip
-  }
-}
+# output "firewall_public_ips" {
+#   description = "Elastic IPs attached to the firewall public or untrust interfaces."
+#   value = {
+#     for az, eip in aws_eip.firewall_public : az => eip.public_ip
+#   }
+# }
 
 output "vpn_tunnel_outside_ips" {
   description = "AWS public tunnel endpoints for the Site-to-Site VPN."

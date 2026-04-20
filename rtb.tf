@@ -388,6 +388,12 @@ resource "aws_route_table" "network_fw_mgmt" {
   }
 }
 
+resource "aws_route" "network_fw_mgmt_default" {
+  route_table_id         = aws_route_table.network_fw_mgmt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.network.id
+}
+
 resource "aws_route" "network_fw_mgmt_on_prem" {
   for_each = local.on_prem_routes
 
