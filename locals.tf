@@ -26,10 +26,10 @@ locals {
     var.tgw_subnet_to_gwlbe_az_map,
   )
 
-  on_prem_routes = var.enable_on_prem_vpn ? {
+  on_prem_routes = {
     for cidr in var.on_prem_cidrs :
     replace(replace(cidr, ".", "-"), "/", "-") => cidr
-  } : {}
+  }
 
   gwlbe_route_destinations = merge(
     {

@@ -8,8 +8,9 @@ common_tags = {
   Owner       = "network-team"
 }
 
-# Leave the on-prem values commented or empty while VPN is disabled.
-on_prem_cidrs            = ["192.168.100.0/24"]
+# These CIDRs are still added to the VPC route tables even when the VPN resources
+# are disabled, so traffic is sent toward the TGW consistently with the route-table design.
+on_prem_cidrs            = ["10.10.0.0/16", "172.16.5.0/24", "10.20.0.0/16", "10.70.0.0/16"]
 vpn_customer_gateway_ip  = "203.0.113.10"
 vpn_customer_gateway_bgp_asn = 65000
 vpn_static_routes_only   = false
