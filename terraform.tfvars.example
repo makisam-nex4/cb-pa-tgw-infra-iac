@@ -1,0 +1,63 @@
+project_name = "cb-pa"
+aws_region   = "ap-southeast-1"
+aws_profile  = "cb-pa"
+enable_on_prem_vpn = false
+
+common_tags = {
+  Environment = "shared"
+  Owner       = "network-team"
+}
+
+# Leave the on-prem values commented or empty while VPN is disabled.
+on_prem_cidrs            = ["192.168.100.0/24"]
+vpn_customer_gateway_ip  = "203.0.113.10"
+vpn_customer_gateway_bgp_asn = 65000
+vpn_static_routes_only   = false
+
+firewall_ami_id                = "ami-xxxxxxxxxxxxxxxxx"
+firewall_instance_type         = "m5.xlarge"
+firewall_key_name              = null
+firewall_instance_profile_name = null
+firewall_user_data             = null
+
+# Optional custom network layout for AWS-NW-VPC-Net. The default values already
+# match the requested ZA/ZB/ZC layout in this repository.
+network_subnet_cidrs = {
+  public = {
+    ap-southeast-1a = "10.212.0.0/28"
+    ap-southeast-1b = "10.212.0.16/28"
+  }
+  fw_data = {
+    ap-southeast-1a = "10.212.0.32/28"
+    ap-southeast-1b = "10.212.0.48/28"
+  }
+  fw_mgmt = {
+    ap-southeast-1a = "10.212.0.64/28"
+    ap-southeast-1b = "10.212.0.80/28"
+  }
+  gwlb = {
+    ap-southeast-1a = "10.212.0.96/28"
+    ap-southeast-1b = "10.212.0.112/28"
+  }
+  gwlbe = {
+    ap-southeast-1a = "10.212.0.128/28"
+    ap-southeast-1b = "10.212.0.144/28"
+  }
+  tgw = {
+    ap-southeast-1a = "10.212.0.176/28"
+    ap-southeast-1b = "10.212.0.192/28"
+    ap-southeast-1c = "10.212.0.208/28"
+  }
+  r53 = {
+    ap-southeast-1a = "10.212.0.224/28"
+    ap-southeast-1b = "10.212.0.240/28"
+  }
+  fw_gp = {
+    ap-southeast-1a = "10.212.1.0/29"
+    ap-southeast-1b = "10.212.1.8/29"
+  }
+}
+
+admin_ingress_cidrs = [
+  "198.51.100.0/24",
+]
