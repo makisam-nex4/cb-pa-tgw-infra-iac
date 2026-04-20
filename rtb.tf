@@ -3,8 +3,8 @@ locals {
     for name, subnet in var.prod_subnets :
     name => (
       strcontains(name, "-app-cluster-private-subnet-")
-      ? regexreplace(name, "-app-cluster-private-subnet-[^-]+$", "-app-private-rt")
-      : regexreplace(name, "-subnet-[^-]+$", "-rt")
+      ? replace(name, "-app-cluster-private-subnet-${local.az_suffixes[subnet.az]}", "-app-private-rt")
+      : replace(name, "-subnet-${local.az_suffixes[subnet.az]}", "-rt")
     )
   }
 
@@ -12,8 +12,8 @@ locals {
     for name, subnet in var.uat_subnets :
     name => (
       strcontains(name, "-app-cluster-private-subnet-")
-      ? regexreplace(name, "-app-cluster-private-subnet-[^-]+$", "-app-private-rt")
-      : regexreplace(name, "-subnet-[^-]+$", "-rt")
+      ? replace(name, "-app-cluster-private-subnet-${local.az_suffixes[subnet.az]}", "-app-private-rt")
+      : replace(name, "-subnet-${local.az_suffixes[subnet.az]}", "-rt")
     )
   }
 
